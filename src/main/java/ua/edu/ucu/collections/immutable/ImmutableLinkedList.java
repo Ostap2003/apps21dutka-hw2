@@ -81,6 +81,7 @@ public final class ImmutableLinkedList implements ImmutableList {
                 return currNode.getValue();
             }
             currNode = currNode.getNext();
+            currId++;
         }
     }
 
@@ -136,7 +137,7 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public boolean isEmpty() {
-        return elNum != 0;
+        return elNum == 0;
     }
 
     @Override
@@ -159,18 +160,30 @@ public final class ImmutableLinkedList implements ImmutableList {
     }
 
     public Node getHead() {
+        if (isEmpty()) {
+            return null;
+        }
         return firstElem;
     }
 
     public Node getTail() {
+        if (isEmpty()) {
+            return null;
+        }
         return lastElem;
     }
 
     public Object getFirst() {
+        if (isEmpty()) {
+            return null;
+        }
         return firstElem.getValue();
     }
 
     public Object getLast() {
+        if (isEmpty()) {
+            return null;
+        }
         return lastElem.getValue();
     }
 
@@ -183,7 +196,7 @@ public final class ImmutableLinkedList implements ImmutableList {
     }
 
     private void checkIndex(int passedId) {
-        if (passedId > elNum) {
+        if (passedId > elNum || passedId < 0) {
             throw new IllegalArgumentException("Index: " + passedId + " is unreachable");
         }
     }

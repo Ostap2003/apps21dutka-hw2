@@ -39,14 +39,14 @@ public final class ImmutableArrayList implements ImmutableList {
         checkIndex(index);
 
         Object[] modifiedArr = new Object[elNum + c.length];
-        for (int i = 0; i < elNum + c.length; i++) {
+        int arrListId = 0;
+        for (int i = 0; i < modifiedArr.length; i++) {
             if (i == index) {
-                for (int j = 0; j < c.length; j++) {
-                    modifiedArr[i + j] = c[j];
-                }
-                i += c.length;
+                System.arraycopy(c, 0, modifiedArr, i, c.length);
+                i += c.length - 1;
             } else {
-                modifiedArr[i] = arrList[i];
+                modifiedArr[i] = arrList[arrListId];
+                arrListId++;
             }
         }
         return new ImmutableArrayList(modifiedArr);
@@ -54,6 +54,7 @@ public final class ImmutableArrayList implements ImmutableList {
 
     @Override
     public Object get(int index) {
+        checkIndex(index);
         return arrList[index];
     }
 
@@ -61,11 +62,11 @@ public final class ImmutableArrayList implements ImmutableList {
     public ImmutableList remove(int index) {
         checkIndex(index);
         Object[] modifiedArr = new Object[elNum - 1];
+        int modifiedArrId = 0;
         for (int i = 0; i < elNum; i++) {
             if (i != index) {
-                modifiedArr[i] = arrList[i];
-            } else {
-                i++;
+                modifiedArr[modifiedArrId] = arrList[i];
+                modifiedArrId++;
             }
         }
         return new ImmutableArrayList(modifiedArr);
@@ -110,7 +111,7 @@ public final class ImmutableArrayList implements ImmutableList {
     }
 
     private void checkIndex(int passedId) {
-        if (passedId > elNum) {
+        if (passedId > elNum || passedId < 0) {
             throw new IllegalArgumentException("index: " + passedId + " is unreachable");
         }
     }
