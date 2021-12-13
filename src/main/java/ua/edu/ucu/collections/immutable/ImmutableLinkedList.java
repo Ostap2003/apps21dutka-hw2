@@ -197,7 +197,9 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     private void checkIndex(int passedId) {
         if (passedId > elNum || passedId < 0) {
-            throw new IllegalArgumentException("Index: " + passedId + " is unreachable");
+            throw new IllegalArgumentException("Index: "
+                    + passedId
+                    + " is unreachable");
         }
     }
 

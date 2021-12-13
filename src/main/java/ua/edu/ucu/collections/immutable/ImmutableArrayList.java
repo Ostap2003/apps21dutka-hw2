@@ -1,7 +1,5 @@
 package ua.edu.ucu.collections.immutable;
 
-import java.util.Arrays;
-import java.util.Objects;
 
 public final class ImmutableArrayList implements ImmutableList {
     private Object[] arrList;
@@ -40,6 +38,7 @@ public final class ImmutableArrayList implements ImmutableList {
 
         Object[] modifiedArr = new Object[elNum + c.length];
         int arrListId = 0;
+
         for (int i = 0; i < modifiedArr.length; i++) {
             if (i == index) {
                 System.arraycopy(c, 0, modifiedArr, i, c.length);
@@ -112,7 +111,9 @@ public final class ImmutableArrayList implements ImmutableList {
 
     private void checkIndex(int passedId) {
         if (passedId > elNum || passedId < 0) {
-            throw new IllegalArgumentException("index: " + passedId + " is unreachable");
+            throw new IllegalArgumentException("index: "
+                    + passedId
+                    + " is unreachable");
         }
     }
 }
