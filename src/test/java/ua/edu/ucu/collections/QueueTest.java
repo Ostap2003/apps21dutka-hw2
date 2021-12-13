@@ -26,5 +26,4 @@ public class QueueTest {
     public void dequeue() {
         assertEquals(1, queue.peek());
     }
-
 }

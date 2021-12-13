@@ -25,7 +25,6 @@ public final class ImmutableLinkedList implements ImmutableList {
                 lastElem = currNode;
             }
         }
-//        this.lastElem = lastNode;
     }
 
     public ImmutableLinkedList() {
@@ -53,37 +52,21 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public ImmutableList addAll(int index, Object[] c) {
-        // todo test method
-        Node nodeToCopy = firstElem;
-        // Object[] copiedElems = new Object[elNum + c.length];
+        checkIndex(index);
 
         Object[] arrRepr = toArray();
         Object[] modifiedArr = new Object[elNum + c.length];
 
-        for (int i = 0; i < elNum + c.length; i++) {
+        int idInArrRep = 0;
+        for (int i = 0; i < modifiedArr.length; i++) {
             if (i == index) {
-                for (int j = 0; j < c.length; j++) {
-                    modifiedArr[j + i] = c[j];
-                }
+                System.arraycopy(c, 0, modifiedArr, index, c.length);
                 i += c.length - 1;
             } else {
-                modifiedArr[i] = arrRepr[i];
+                modifiedArr[i] = arrRepr[idInArrRep];
+                idInArrRep++;
             }
         }
-
-//        int currId = 0;
-//        while (nodeToCopy != null) {
-//            if (currId == index) {
-//                for (int i = 0; i < c.length; i++) {
-//                    copiedElems[currId + i] = c[i];
-//                    currId++;
-//                }
-//            } else {
-//                copiedElems[currId] = nodeToCopy.getValue();
-//                nodeToCopy = nodeToCopy.getNext();
-//                currId++;
-//            }
-//        }
         return new ImmutableLinkedList(modifiedArr);
     }
 
@@ -106,22 +89,16 @@ public final class ImmutableLinkedList implements ImmutableList {
         checkIndex(index);
 
         Object[] arrRepresentation = toArray();
-        ImmutableLinkedList newList = new ImmutableLinkedList(arrRepresentation);
-        int currId = 0;
-        Node currNode = newList.firstElem;
+        Object[] modifiedArr = new Object[elNum - 1];
 
-        while (true) {
-            if (currId == index) {
-                Node prevOfCurrNode = currNode.getPrevious();
-                Node nextOfCurrNode = currNode.getNext();
-                prevOfCurrNode.setNext(nextOfCurrNode);
-                break;
-            } else {
-                currNode = currNode.getNext();
-                currId++;
+        int modifiedArrId = 0;
+        for (int i = 0; i < elNum; i++) {
+            if (i != index) {
+                modifiedArr[modifiedArrId] = arrRepresentation[i];
+                modifiedArrId++;
             }
         }
-        return newList;
+        return new ImmutableLinkedList(modifiedArr);
     }
 
     @Override
@@ -159,38 +136,21 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public boolean isEmpty() {
-        if (firstElem != null) {
-            return true;
-        }
-        return false;
+        return elNum != 0;
     }
 
     @Override
     public Object[] toArray() {
         Object[] elems = new Object[elNum];
         Node currNode = firstElem;
-        int currId = 0;
-        while (currNode != null) {
-            elems[currId] = currNode.getValue();
+        for (int i = 0; i < elNum; i++) {
+            elems[i] = currNode.getValue();
             currNode = currNode.getNext();
-            currId++;
         }
         return elems;
     }
 
     public ImmutableLinkedList addFirst(Object e) {
-//        Object[] arrCopy = toArray();
-//        Object[] modifiedArr = new Object[arrCopy.length + 1];
-//        modifiedArr[0] = e;
-//
-//        // todo: check if can be changed to a suggestion
-//        // maybe we can use this.add here
-//
-//        for (int i = 1; i <= elNum; i++) {
-//            modifiedArr[i] = arrCopy[i - 1];
-//        }
-//        return new ImmutableLinkedList(modifiedArr);
-
         return (ImmutableLinkedList) add(0, e);
     }
 
@@ -223,8 +183,12 @@ public final class ImmutableLinkedList implements ImmutableList {
     }
 
     private void checkIndex(int passedId) {
-        if (passedId >= elNum) {
+        if (passedId > elNum) {
             throw new IllegalArgumentException("Index: " + passedId + " is unreachable");
         }
+    }
+
+    public String toString() {
+        return Arrays.toString(toArray());
     }
 }
